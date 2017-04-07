@@ -1,0 +1,59 @@
+clear all
+clc
+
+%% Plant
+m=700;
+g=9.81;
+%Fz= m*g/2;
+r=0.25;
+J=1;
+theta1=0.86; %wet asphalt conditions
+theta2=33.82;
+theta3=0.35;
+v0=1;
+gear_ratio=7.13; %Getriebeübersetzung
+v_max=100/3.6; %Höchstgeschwindigkeit
+power_engine=45000; %Leistung Motor --> noch nachfragen
+
+h_CoM=0.5;
+l_f=1.5;
+l_r=1.5;
+    l=l_f+l_r;
+    
+cw=0.3;
+A=2;
+rho=1.2;
+    W_luft=0.5*cw*A*rho;
+
+%% Matrix A, B
+
+Ta0=500;
+lambda_0=0;
+w0=40;
+Fz0=400*9.81;
+
+a1= Ta0/(J*w0)-Fz0*r/(J*w0)*(theta1*theta2*exp(-lambda_0*theta2)-theta3)+Fz0*r/(J*w0)*(theta1*(1-exp(-lambda_0*theta2)-lambda_0*theta2*exp(-lambda_0*theta2))-2*lambda_0*theta3)-Fz0/(m*r*w0)*(theta1*theta2*exp(-lambda_0*theta2)-theta3);
+
+b1=1/(J*w0)-lambda_0/(J*w0);
+
+
+%% Controller LQR
+
+A= a1;
+B= b1;
+Q=1.e+5;
+R=0.0001;
+lambda_target=0.1;
+saturation_integrator_high=0.5;
+
+K_lqr= lqr(A,B,Q,R);
+
+
+max_torque=140; %Max. Drehmoment Motor
+saturation_high=max_torque*gear_ratio;
+
+sim('Acceleration_V7',60)
+Simulink.sdi.view
+
+
+
