@@ -41,7 +41,7 @@ b1=1/(J*w0)-lambda_0/(J*w0);
 
 A= a1;
 B= b1;
-Q=1.e+5;
+Q=5.e+5;
 R=0.0001;
 lambda_target=0.1;
 saturation_integrator_high=0.5;
@@ -52,7 +52,7 @@ K_lqr= lqr(A,B,Q,R);
 max_torque=140; %Max. Drehmoment Motor
 saturation_high=max_torque*gear_ratio;
 
-sim('Acceleration_V7',60)
+sim('Acceleration',60)
 Simulink.sdi.view
 
 
