@@ -1,7 +1,7 @@
 clear all
 clc
 
-%% Plant
+%% Transfer Function Torque to lambda
 m=700;
 g=9.81;
 r=0.25;
@@ -23,10 +23,18 @@ cw=0.3;
 A=2.5;
 rho=1.2;
     W_luft=0.5*cw*A*rho; % Airdrag
+    
+
+%% Transfer function voltage to torque
+
+a=31.111;
+b=-12.44444; %f(x)=ax+b
+saturation_voltage_high=4.9;
+saturation_voltage_low=0.4;
 
 %% Matrix A, B
 
-Ta0=500;
+Ta0=1000;
 lambda_0=0;
 w0=40;
 Fz0=400*g;
@@ -38,25 +46,26 @@ b1=1/(J*w0)-lambda_0/(J*w0);
 
 %% Controller LQR
 
-%A= a1;
+A= a1;
 
-%B= b1;
+B= b1;
 
-%Q=5.e+5;
-%R=0.0001;
+Q=1000;
+R=0.0001;
 
 lambda_target=0.1;
 saturation_integrator_high=0.5;
 
-%K_lqr= lqr(A,B,Q,R)
+K_lqr= lqr(A,B,Q,R)
 
 
 max_torque=140; %Max. Drehmoment Motor
-saturation_high=max_torque*gear_ratio;
+saturation_torque_high=max_torque*gear_ratio;
 
 
 %% 
-sim('Acceleration',30)
+sim('Acceleration',60)
 Simulink.sdi.view
+
 
 
