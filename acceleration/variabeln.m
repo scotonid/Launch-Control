@@ -44,6 +44,7 @@ a1= Ta0/(J*w0)-Fz0*r/(J*w0)*(theta1*theta2*exp(-lambda_0*theta2)-theta3)+Fz0*r/(
 b1=1/(J*w0)-lambda_0/(J*w0);
 
 
+
 %% Controller LQR
 
 A= a1;
