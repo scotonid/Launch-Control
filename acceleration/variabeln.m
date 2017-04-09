@@ -35,8 +35,8 @@ saturation_voltage_low=0.4;
 %% Matrix A, B
 
 Ta0=1000;
-lambda_0=0;
-w0=40;
+lambda_0=0.1;
+w0=200;
 Fz0=400*g;
 
 a1= Ta0/(J*w0)-Fz0*r/(J*w0)*(theta1*theta2*exp(-lambda_0*theta2)-theta3)+Fz0*r/(J*w0)*(theta1*(1-exp(-lambda_0*theta2)-lambda_0*theta2*exp(-lambda_0*theta2))-2*lambda_0*theta3)-Fz0/(m*r*w0)*(theta1*theta2*exp(-lambda_0*theta2)-theta3);
@@ -50,8 +50,10 @@ A= a1;
 
 B= b1;
 
-Q=1000;
-R=0.0001;
+
+Q=100;
+
+R=0.001;
 
 lambda_target=0.1;
 saturation_integrator_high=0.5;
@@ -63,7 +65,9 @@ max_torque=140; %Max. Drehmoment Motor
 saturation_torque_high=max_torque*gear_ratio;
 
 
+
 %% 
+
 sim('Acceleration',60)
 Simulink.sdi.view
 
