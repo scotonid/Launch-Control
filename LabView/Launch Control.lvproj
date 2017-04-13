@@ -543,6 +543,7 @@ AddOutputFilter chunkFilter
 				<Property Name="FPGA.PersistentID" Type="Str">{84D11091-C61F-4005-BD7D-D06C636FA99F}</Property>
 			</Item>
 		</Item>
+		<Item Name="Lambda.vi" Type="VI" URL="../Lambda.vi"/>
 		<Item Name="Main.vi" Type="VI" URL="../Main.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">

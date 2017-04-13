@@ -1,10 +1,9 @@
 clear all
 clc
 
-%% Plant
+%% Transfer Function Torque to lambda
 m=700;
 g=9.81;
-%Fz= m*g/2;
 r=0.25;
 J=1;
 theta1=0.86; %wet asphalt conditions
@@ -15,42 +14,60 @@ gear_ratio=7.13; %Getriebeübersetzung
 v_max=100/3.6; %Höchstgeschwindigkeit
 power_engine=45000; %Leistung Motor --> noch nachfragen
 
-h_CoM=0.5;
-l_f=1.5;
+h_CoM=0.5; %Hight Center of Mass
+l_f=1.5; 
 l_r=1.5;
-    l=l_f+l_r;
+    l=l_f+l_r; %Wheelbase
     
 cw=0.3;
-A=2;
+A=2.5;
 rho=1.2;
-    W_luft=0.5*cw*A*rho;
+    W_luft=0.5*cw*A*rho; % Airdrag
+    
+
+%% Transfer function voltage to torque
+
+a=31.111;
+b=-12.44444; %f(x)=ax+b
+saturation_voltage_high=4.9;
+saturation_voltage_low=0.4;
 
 %% Matrix A, B
 
-Ta0=500;
-lambda_0=0;
-w0=40;
-Fz0=400*9.81;
+Ta0=1000;
+lambda_0=0.1;
+w0=200;
+Fz0=400*g;
 
 a1= Ta0/(J*w0)-Fz0*r/(J*w0)*(theta1*theta2*exp(-lambda_0*theta2)-theta3)+Fz0*r/(J*w0)*(theta1*(1-exp(-lambda_0*theta2)-lambda_0*theta2*exp(-lambda_0*theta2))-2*lambda_0*theta3)-Fz0/(m*r*w0)*(theta1*theta2*exp(-lambda_0*theta2)-theta3);
 
 b1=1/(J*w0)-lambda_0/(J*w0);
 
 
+
 %% Controller LQR
 
 A= a1;
+
 B= b1;
-Q=5.e+5;
-R=0.0001;
+
+
+Q=100;
+
+R=0.001;
+
 lambda_target=0.1;
 saturation_integrator_high=0.5;
 
-K_lqr= lqr(A,B,Q,R);
+K_lqr= lqr(A,B,Q,R)
 
 
 max_torque=140; %Max. Drehmoment Motor
-saturation_high=max_torque*gear_ratio;
+saturation_torque_high=max_torque*gear_ratio;
+
+
+
+%% 
 
 sim('Acceleration',60)
 Simulink.sdi.view
