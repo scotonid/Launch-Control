@@ -34,7 +34,7 @@ saturation_voltage_low=0.4;
 
 %% Matrix A, B
 
-Ta0=1000;
+Ta0=800;
 lambda_0=0.1;
 w0=200;
 Fz0=400*g;
@@ -52,12 +52,12 @@ A= a1;
 B= b1;
 
 
-Q=100;
+Q=1000;
 
-R=0.001;
+R=0.01;
 
 lambda_target=0.1;
-saturation_integrator_high=0.5;
+
 
 K_lqr= lqr(A,B,Q,R);
 
@@ -69,7 +69,7 @@ saturation_torque_high=max_torque*gear_ratio;
 
 %% 
 
-sim('Acceleration',60)
+sim('Acceleration',30)
 Simulink.sdi.view
 
 
