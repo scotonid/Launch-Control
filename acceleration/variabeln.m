@@ -1,4 +1,4 @@
-clear all
+clear variables
 clc
 
 %% Transfer Function Torque to lambda
@@ -59,7 +59,7 @@ R=0.001;
 lambda_target=0.1;
 saturation_integrator_high=0.5;
 
-K_lqr= lqr(A,B,Q,R)
+K_lqr= lqr(A,B,Q,R);
 
 
 max_torque=140; %Max. Drehmoment Motor
