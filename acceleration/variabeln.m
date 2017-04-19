@@ -1,4 +1,4 @@
-clear variables
+%clear variables
 clc
 
 %% Transfer Function Torque to lambda
@@ -66,10 +66,72 @@ max_torque=140; %Max. Drehmoment Motor
 saturation_torque_high=max_torque*gear_ratio;
 
 
+%% Model Verification V13
 
-%% 
+% voltage_import=Cutv13;
+% 
+% voltage_measured.time = 0:0.02:(199-1)*0.02;
+% voltage_measured.signals.values = voltage_import;
+% voltage_measured.signals.dimensions = 1;
+% 
+% 
+% velocity_import=Cutv1;
+% 
+% velocity_measured.time=0:0.02:(199-1)*0.02;
+% velocity_measured.signals.values = velocity_import;
+% velocity_measured.signals.dimensions = 1;
+% 
+% 
+% lambda_import = Cutv2;
+% 
+% lambda_measured.time = 0:0.02:(199-1)*0.02;
+% lambda_measured.signals.values = lambda_import;
+% lambda_measured.signals.dimensions = 1;
+% 
+% 
+% omega_import=Cutv3;
+% 
+% omega_measured.time = 0:0.02:(199-1)*0.02;
+% omega_measured.signals.values = omega_import;
+% omega_measured.signals.dimensions = 1;
 
-sim('Acceleration',30)
+
+%% Model Verification V8
+
+voltage_import=Cutv8;
+
+voltage_measured.time = 0:0.02:(217-1)*0.02;
+voltage_measured.signals.values = voltage_import;
+voltage_measured.signals.dimensions = 1;
+
+
+velocity_import=Cutv1;
+
+velocity_measured.time=0:0.02:(217-1)*0.02;
+velocity_measured.signals.values = velocity_import;
+velocity_measured.signals.dimensions = 1;
+
+
+lambda_import = Cutv2;
+
+lambda_measured.time = 0:0.02:(217-1)*0.02;
+lambda_measured.signals.values = lambda_import;
+lambda_measured.signals.dimensions = 1;
+
+
+omega_import=Cutv3;
+
+omega_measured.time = 0:0.02:(217-1)*0.02;
+omega_measured.signals.values = omega_import;
+omega_measured.signals.dimensions = 1;
+
+
+
+%%
+
+
+
+sim('Acceleration',217*0.01)
 Simulink.sdi.view
 
 
