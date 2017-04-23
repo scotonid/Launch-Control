@@ -3,6 +3,7 @@
 	<Property Name="varPersistentID:{510E91EC-B273-4267-BDFF-DD0A591557E4}" Type="Ref">/RT CompactRIO Target/Chassis/Mod1/AO2</Property>
 	<Property Name="varPersistentID:{5AA47D71-A630-454F-A6DE-14746214DF8D}" Type="Ref">/RT CompactRIO Target/Chassis/Mod1/AO1</Property>
 	<Property Name="varPersistentID:{A9E22303-5663-41FD-AF84-03E7D096B2EC}" Type="Ref">/RT CompactRIO Target/Chassis/Mod1/AO3</Property>
+	<Property Name="varPersistentID:{CBE64A64-4B61-469C-99A9-DFD93D8693C6}" Type="Ref">/RT CompactRIO Target/close file.lvlib/refnum out</Property>
 	<Property Name="varPersistentID:{FADC5A57-2DEC-4189-8A82-95CC706D2D23}" Type="Ref">/RT CompactRIO Target/Chassis/Mod1/AO0</Property>
 	<Item Name="My Computer" Type="My Computer">
 		<Property Name="IOScan.Faults" Type="Str"></Property>
@@ -103,6 +104,17 @@ AddOutputFilter chunkFilter
 		<Property Name="target.WebServer.ViAccess" Type="Str">+*</Property>
 		<Property Name="target.webservices.SecurityAPIKey" Type="Str">PqVr/ifkAQh+lVrdPIykXlFvg12GhhQFR8H9cUhphgg=:pTe9HRlQuMfJxAG6QCGq7UvoUpJzAzWGKy5SbZ+roSU=</Property>
 		<Property Name="target.webservices.ValidTimestampWindow" Type="Int">15</Property>
+		<Item Name="Global Variables" Type="Folder">
+			<Item Name="Globale Variable.vi" Type="VI" URL="../Globale Variable/Globale Variable.vi"/>
+		</Item>
+		<Item Name="SubVI&apos;s" Type="Folder">
+			<Item Name="Controller.vi" Type="VI" URL="../SubVIs/Controller.vi"/>
+			<Item Name="Data Logging.vi" Type="VI" URL="../SubVIs/Data Logging.vi"/>
+			<Item Name="FPGA.vi" Type="VI" URL="../SubVIs/FPGA.vi"/>
+			<Item Name="SplitString(SubVI).vi" Type="VI" URL="../SubVIs/SplitString(SubVI).vi"/>
+			<Item Name="UDP ROBO to CRIO.vi" Type="VI" URL="../SubVIs/UDP ROBO to CRIO.vi"/>
+		</Item>
+		<Item Name="Autonomous Mode Bool.vi" Type="VI" URL="../SubVIs/Autonomous Mode Bool.vi"/>
 		<Item Name="Chassis" Type="cRIO Chassis">
 			<Property Name="crio.ProgrammingMode" Type="Str">fpga</Property>
 			<Property Name="crio.ResourceID" Type="Str">RIO0</Property>
@@ -583,12 +595,8 @@ AddOutputFilter chunkFilter
 				<Property Name="FPGA.PersistentID" Type="Str">{84D11091-C61F-4005-BD7D-D06C636FA99F}</Property>
 			</Item>
 		</Item>
-		<Item Name="Data Logging.vi" Type="VI" URL="../SubVIs/Data Logging.vi"/>
-		<Item Name="FPGA.vi" Type="VI" URL="../SubVIs/FPGA.vi"/>
-		<Item Name="Globale Variable.vi" Type="VI" URL="../Globale Variable/Globale Variable.vi"/>
+		<Item Name="close file.lvlib" Type="Library" URL="../close file.lvlib"/>
 		<Item Name="Main.vi" Type="VI" URL="../Main.vi"/>
-		<Item Name="SplitString(SubVI).vi" Type="VI" URL="../SubVIs/SplitString(SubVI).vi"/>
-		<Item Name="UDP ROS Reciever.vi" Type="VI" URL="../SubVIs/UDP ROS Reciever.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">
 				<Item Name="Clear Errors.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Clear Errors.vi"/>
