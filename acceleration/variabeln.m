@@ -6,12 +6,23 @@ m=700;
 g=9.81;
 r=0.25;
 J=1;
+
 theta1=0.86; %wet asphalt conditions
 theta2=33.82;
 theta3=0.35;
+
+% theta1=0.19; %snow condition
+% theta2=94.13;
+% theta3=0.06;
+
+% theta1=1.28; %dry asphalt condition
+% theta2=23.99;
+% theta3=0.52;
+
+
 v0=1;
 gear_ratio=7.13; %Getriebeübersetzung
-v_max=100/3.6; %Höchstgeschwindigkeit
+v_max=110/3.6; %Höchstgeschwindigkeit
 power_engine=45000; %Leistung Motor --> noch nachfragen
 
 h_CoM=0.5; %Hight Center of Mass
@@ -52,7 +63,7 @@ A= a1;
 B= b1;
 
 
-Q=100;
+Q=1000;
 
 R=0.01;
 

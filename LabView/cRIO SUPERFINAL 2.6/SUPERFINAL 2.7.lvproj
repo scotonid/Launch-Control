@@ -625,6 +625,7 @@ AddOutputFilter chunkFilter
 				<Item Name="Clear Errors.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Clear Errors.vi"/>
 				<Item Name="Error Cluster From Error Code.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Error Cluster From Error Code.vi"/>
 				<Item Name="lvSimController.dll" Type="Document" URL="/&lt;vilib&gt;/rvi/Simulation/lvSimController.dll"/>
+				<Item Name="NILVSim.dll" Type="Document" URL="/&lt;vilib&gt;/Simulation/Implementation/Shared/NILVSim.dll"/>
 				<Item Name="SIM limit type.ctl" Type="VI" URL="/&lt;vilib&gt;/Simulation/Implementation/Shared/SIM limit type.ctl"/>
 				<Item Name="Space Constant.vi" Type="VI" URL="/&lt;vilib&gt;/dlg_ctls.llb/Space Constant.vi"/>
 			</Item>
@@ -632,6 +633,7 @@ AddOutputFilter chunkFilter
 			<Item Name="NiFpgaLv.dll" Type="Document" URL="NiFpgaLv.dll">
 				<Property Name="NI.PreserveRelativePath" Type="Bool">true</Property>
 			</Item>
+			<Item Name="SplitString(SubVI).vi" Type="VI" URL="../../SubVIs/SplitString(SubVI).vi"/>
 			<Item Name="Vollbremsloop.vi" Type="VI" URL="../SubVI/Vollbremsloop.vi"/>
 		</Item>
 		<Item Name="Build Specifications" Type="Build">

@@ -36,6 +36,7 @@
 		<Property Name="host.ResponsivenessCheckPingTimeout" Type="UInt">1000</Property>
 		<Property Name="host.TargetCPUID" Type="UInt">8</Property>
 		<Property Name="host.TargetOSID" Type="UInt">8</Property>
+		<Property Name="NI.SortType" Type="Int">3</Property>
 		<Property Name="target.cleanupVisa" Type="Bool">false</Property>
 		<Property Name="target.FPProtocolGlobals_ControlTimeLimit" Type="Int">300</Property>
 		<Property Name="target.getDefault-&gt;WebServer.Port" Type="Int">80</Property>
@@ -113,8 +114,9 @@ AddOutputFilter chunkFilter
 			<Item Name="FPGA.vi" Type="VI" URL="../SubVIs/FPGA.vi"/>
 			<Item Name="SplitString(SubVI).vi" Type="VI" URL="../SubVIs/SplitString(SubVI).vi"/>
 			<Item Name="UDP ROBO to CRIO.vi" Type="VI" URL="../SubVIs/UDP ROBO to CRIO.vi"/>
+			<Item Name="K Calculation.vi" Type="VI" URL="../SubVIs/K Calculation.vi"/>
+			<Item Name="Autonomous Mode Bool.vi" Type="VI" URL="../SubVIs/Autonomous Mode Bool.vi"/>
 		</Item>
-		<Item Name="Autonomous Mode Bool.vi" Type="VI" URL="../SubVIs/Autonomous Mode Bool.vi"/>
 		<Item Name="Chassis" Type="cRIO Chassis">
 			<Property Name="crio.ProgrammingMode" Type="Str">fpga</Property>
 			<Property Name="crio.ResourceID" Type="Str">RIO0</Property>
@@ -599,15 +601,76 @@ AddOutputFilter chunkFilter
 		<Item Name="Main.vi" Type="VI" URL="../Main.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">
-				<Item Name="Clear Errors.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Clear Errors.vi"/>
 				<Item Name="Error Cluster From Error Code.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Error Cluster From Error Code.vi"/>
-				<Item Name="NILVSim.dll" Type="Document" URL="/&lt;vilib&gt;/Simulation/Implementation/Shared/NILVSim.dll"/>
 				<Item Name="Space Constant.vi" Type="VI" URL="/&lt;vilib&gt;/dlg_ctls.llb/Space Constant.vi"/>
+				<Item Name="Clear Errors.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Clear Errors.vi"/>
+				<Item Name="NILVSim.dll" Type="Document" URL="/&lt;vilib&gt;/Simulation/Implementation/Shared/NILVSim.dll"/>
 			</Item>
 			<Item Name="NiFpgaLv.dll" Type="Document" URL="NiFpgaLv.dll">
 				<Property Name="NI.PreserveRelativePath" Type="Bool">true</Property>
 			</Item>
 		</Item>
-		<Item Name="Build Specifications" Type="Build"/>
+		<Item Name="Build Specifications" Type="Build">
+			<Item Name="Launch " Type="{69A947D5-514E-4E75-818E-69657C0547D8}">
+				<Property Name="App_copyErrors" Type="Bool">true</Property>
+				<Property Name="App_INI_aliasGUID" Type="Str">{25227447-8147-48F3-92C8-B558639EF226}</Property>
+				<Property Name="App_INI_GUID" Type="Str">{ED1A314C-4436-4025-BB6C-8A626AD46631}</Property>
+				<Property Name="App_serverConfig.httpPort" Type="Int">8002</Property>
+				<Property Name="Bld_autoIncrement" Type="Bool">true</Property>
+				<Property Name="Bld_buildCacheID" Type="Str">{615CB714-ACDB-4744-AB47-49E5C0ED3D2C}</Property>
+				<Property Name="Bld_buildSpecName" Type="Str">Launch </Property>
+				<Property Name="Bld_compilerOptLevel" Type="Int">0</Property>
+				<Property Name="Bld_excludeInlineSubVIs" Type="Bool">true</Property>
+				<Property Name="Bld_excludeLibraryItems" Type="Bool">true</Property>
+				<Property Name="Bld_excludePolymorphicVIs" Type="Bool">true</Property>
+				<Property Name="Bld_localDestDir" Type="Path">../builds/NI_AB_PROJECTNAME/NI_AB_TARGETNAME/Launch</Property>
+				<Property Name="Bld_localDestDirType" Type="Str">relativeToCommon</Property>
+				<Property Name="Bld_modifyLibraryFile" Type="Bool">true</Property>
+				<Property Name="Bld_previewCacheID" Type="Str">{BA9ED8BB-2BC4-41BD-9A9E-E1D462F78A7A}</Property>
+				<Property Name="Bld_targetDestDir" Type="Path">/home/lvuser/natinst/bin</Property>
+				<Property Name="Bld_version.build" Type="Int">1</Property>
+				<Property Name="Bld_version.major" Type="Int">1</Property>
+				<Property Name="Destination[0].destName" Type="Str">startup.rtexe</Property>
+				<Property Name="Destination[0].path" Type="Path">/home/lvuser/natinst/bin/startup.rtexe</Property>
+				<Property Name="Destination[0].path.type" Type="Str">&lt;none&gt;</Property>
+				<Property Name="Destination[0].preserveHierarchy" Type="Bool">true</Property>
+				<Property Name="Destination[0].type" Type="Str">App</Property>
+				<Property Name="Destination[1].destName" Type="Str">Support Directory</Property>
+				<Property Name="Destination[1].path" Type="Path">/home/lvuser/natinst/bin/data</Property>
+				<Property Name="Destination[1].path.type" Type="Str">&lt;none&gt;</Property>
+				<Property Name="DestinationCount" Type="Int">2</Property>
+				<Property Name="Source[0].itemID" Type="Str">{3337A21D-6D7E-4A28-AB72-84248280E659}</Property>
+				<Property Name="Source[0].type" Type="Str">Container</Property>
+				<Property Name="Source[1].destinationIndex" Type="Int">0</Property>
+				<Property Name="Source[1].itemID" Type="Ref">/RT CompactRIO Target/Main.vi</Property>
+				<Property Name="Source[1].sourceInclusion" Type="Str">TopLevel</Property>
+				<Property Name="Source[1].type" Type="Str">VI</Property>
+				<Property Name="Source[2].destinationIndex" Type="Int">0</Property>
+				<Property Name="Source[2].itemID" Type="Ref">/RT CompactRIO Target/close file.lvlib</Property>
+				<Property Name="Source[2].Library.allowMissingMembers" Type="Bool">true</Property>
+				<Property Name="Source[2].sourceInclusion" Type="Str">Include</Property>
+				<Property Name="Source[2].type" Type="Str">Library</Property>
+				<Property Name="Source[3].Container.applyInclusion" Type="Bool">true</Property>
+				<Property Name="Source[3].Container.depDestIndex" Type="Int">0</Property>
+				<Property Name="Source[3].destinationIndex" Type="Int">0</Property>
+				<Property Name="Source[3].itemID" Type="Ref">/RT CompactRIO Target/SubVI's</Property>
+				<Property Name="Source[3].sourceInclusion" Type="Str">Include</Property>
+				<Property Name="Source[3].type" Type="Str">Container</Property>
+				<Property Name="Source[4].Container.applyInclusion" Type="Bool">true</Property>
+				<Property Name="Source[4].Container.depDestIndex" Type="Int">0</Property>
+				<Property Name="Source[4].destinationIndex" Type="Int">0</Property>
+				<Property Name="Source[4].itemID" Type="Ref">/RT CompactRIO Target/Global Variables</Property>
+				<Property Name="Source[4].sourceInclusion" Type="Str">Include</Property>
+				<Property Name="Source[4].type" Type="Str">Container</Property>
+				<Property Name="SourceCount" Type="Int">5</Property>
+				<Property Name="TgtF_companyName" Type="Str">ETH Zürich</Property>
+				<Property Name="TgtF_fileDescription" Type="Str">Launch </Property>
+				<Property Name="TgtF_internalName" Type="Str">Launch </Property>
+				<Property Name="TgtF_legalCopyright" Type="Str">Copyright © 2017 ETH Zürich</Property>
+				<Property Name="TgtF_productName" Type="Str">Launch </Property>
+				<Property Name="TgtF_targetfileGUID" Type="Str">{050672CF-F84C-4A51-9E59-439D45879FD1}</Property>
+				<Property Name="TgtF_targetfileName" Type="Str">startup.rtexe</Property>
+			</Item>
+		</Item>
 	</Item>
 </Project>
