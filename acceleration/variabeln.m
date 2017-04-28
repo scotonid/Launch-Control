@@ -6,14 +6,14 @@ m=800;
 g=9.81;
 r=0.25;
 J=1;
-
-theta1=1.28; %dry asphalt conditions
- theta2=23.99;
- theta3=0.52;
+% 
+% theta1=1.28; %dry asphalt conditions
+%  theta2=23.99;
+%  theta3=0.52;
  
-%  theta1=0.86; %wet asphalt conditions
-%  theta2=33.82;
-%  theta3=0.35;
+theta1=0.86; %wet asphalt conditions
+theta2=33.82;
+theta3=0.35;
 %  
 %  theta1=0.19; %snow conditions
 %  theta2=94.13;
