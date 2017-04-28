@@ -59,7 +59,7 @@ R=0.01;
 lambda_target=0.1;
 
 
-K_lqr= lqr(A,B,Q,R);
+K_lqr= lqr(A,B,Q,R)
 
  
 max_torque=140; %Max. Drehmoment Motor
