@@ -1,4 +1,3 @@
-clear variables
 clc
 
 %% Transfer Function Torque to lambda
@@ -6,9 +5,18 @@ m=700;
 g=9.81;
 r=0.25;
 J=1;
+
 theta1=0.86; %wet asphalt conditions
 theta2=33.82;
 theta3=0.35;
+
+% theta1= 1.28; %dry asphalt conditions
+% theta2=23.99;
+% theta3=0.52;
+
+
+
+
 v0=1;
 gear_ratio=7.13; %Getriebeübersetzung
 v_max=100/3.6; %Höchstgeschwindigkeit
@@ -25,12 +33,26 @@ rho=1.2;
     W_luft=0.5*cw*A*rho; % Airdrag
     
 
+    
+%% Delay Implementation
+
+lambda_m.time=0:0.02:(199-1)*0.02;
+lambda_m.signals.values=lambda_measured;
+lambda_m.signals.dimensions=1;
+
+voltage_m.time=0:0.02:(199-1)*0.02;
+voltage_m.signals.values=Voltage_me;
+voltage_m.signals.dimensions=1;
+
+
 %% Transfer function voltage to torque
 
 a=31.111;
 b=-12.44444; %f(x)=ax+b
 saturation_voltage_high=4.9;
-saturation_voltage_low=0.4;
+saturation_voltage_low=0.5;
+
+
 
 %% Matrix A, B
 
@@ -52,14 +74,16 @@ A= a1;
 B= b1;
 
 
-Q=100;
+Q=10;
 
-R=0.01;
+R=0.1;
 
 lambda_target=0.1;
 
+linearization_voltage=(Ta0/gear_ratio-b)/a;
 
-K_lqr= lqr(A,B,Q,R)
+
+K_lqr= lqr(A,B,Q,R);
 
  
 max_torque=140; %Max. Drehmoment Motor
@@ -69,7 +93,7 @@ saturation_torque_high=max_torque*gear_ratio;
 
 %% 
 
-sim('Acceleration',30)
+sim('Acceleration',5)
 Simulink.sdi.view
 
 
