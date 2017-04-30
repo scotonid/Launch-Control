@@ -67,9 +67,10 @@ saturation_torque_high=max_torque*gear_ratio;
 
 
 
+
 %% 
 
-sim('Acceleration',30)
+sim('Acceleration',5)
 Simulink.sdi.view
 
 
