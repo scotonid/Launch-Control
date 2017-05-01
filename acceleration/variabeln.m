@@ -1,4 +1,4 @@
-clear variables
+%clear variables
 clc
 
 %% Transfer Function Torque to lambda
@@ -8,19 +8,21 @@ r=0.25;
 J=1;
 % 
 % theta1=1.28; %dry asphalt conditions
-%  theta2=23.99;
-%  theta3=0.52;
+% theta2=23.99;
+% theta3=0.52;
  
 theta1=0.86; %wet asphalt conditions
 theta2=33.82;
 theta3=0.35;
-%  
+ 
 %  theta1=0.19; %snow conditions
 %  theta2=94.13;
 %  theta3=0.06;
 
-v0=0.1;
+v0=1.5;
 gear_ratio=7.13; %Getriebeübersetzung
+torque_max_engine=140; %Maximales Drehmoment vom Motor
+torque_max_onwheel=torque_max_engine*gear_ratio/2; %Maximales Moment je Hinterrad
 v_max=100/3.6; %Höchstgeschwindigkeit
 power_engine=45000; %Leistung Motor --> noch nachfragen
 
@@ -33,6 +35,9 @@ cw=0.3;
 A=2.5;
 rho=1.2;
     W_luft=0.5*cw*A*rho; % Airdrag
+    
+f_r=0.015; % wheel resistance coeff.
+F_rtot=f_r*m*g; %wheel resistance of all wheels
     
 
 %% Transfer function voltage to torque
@@ -76,70 +81,41 @@ max_torque=140; %Max. Drehmoment Motor
 saturation_torque_high=max_torque*gear_ratio;
 
 
-%% Model Verification V13
-
-% voltage_import=Cutv13;
-% 
-% voltage_measured.time = 0:0.02:(199-1)*0.02;
-% voltage_measured.signals.values = voltage_import;
-% voltage_measured.signals.dimensions = 1;
-% 
-% 
-% velocity_import=Cutv1;
-% 
-% velocity_measured.time=0:0.02:(199-1)*0.02;
-% velocity_measured.signals.values = velocity_import;
-% velocity_measured.signals.dimensions = 1;
-% 
-% 
-% lambda_import = Cutv2;
-% 
-% lambda_measured.time = 0:0.02:(199-1)*0.02;
-% lambda_measured.signals.values = lambda_import;
-% lambda_measured.signals.dimensions = 1;
-% 
-% 
-% omega_import=Cutv3;
-% 
-% omega_measured.time = 0:0.02:(199-1)*0.02;
-% omega_measured.signals.values = omega_import;
-% omega_measured.signals.dimensions = 1;
 
 
-%% Model Verification V8
-% 
-% voltage_import=voltage;
-% 
-% voltage_measured.time = 0:0.02:(217-1)*0.02;
-% voltage_measured.signals.values = voltage_import;
-% voltage_measured.signals.dimensions = 1;
+%% Model Verification 
+ 
+voltage_import=voltage;
+
+voltage_measured.time = 0:0.02:(199-1)*0.02;
+voltage_measured.signals.values = voltage_import;
+voltage_measured.signals.dimensions = 1;
 
 
-%velocity_front_import=V_front;
+velocity_front_import=V_front;
 
-%velocity_front_measured.time=0:0.02:(217-1)*0.02;
-%velocity_front_measured.signals.values = velocity_front_import;
-%velocity_front_measured.signals.dimensions = 1;
+velocity_front_measured.time=0:0.02:(199-1)*0.02;
+velocity_front_measured.signals.values = velocity_front_import;
+velocity_front_measured.signals.dimensions = 1;
 
-%velocity_rear_import=V_back;
+velocity_rear_import=V_rear;
 
-%velocity_rear_measured.time=0:0.02:(217-1)*0.02;
-%velocity_rear_measured.signals.values = velocity_rear_import;
-%velocity_rear_measured.signals.dimensions = 1;
+velocity_rear_measured.time=0:0.02:(199-1)*0.02;
+velocity_rear_measured.signals.values = velocity_rear_import;
+velocity_rear_measured.signals.dimensions = 1;
 
 
-% 
-% lambda_import = lambda;
-% 
-% lambda_measured.time = 0:0.02:(217-1)*0.02;
-% lambda_measured.signals.values = lambda_import;
-% lambda_measured.signals.dimensions = 1;
+ 
+ lambda_import = lambda;
+ 
+ lambda_measured.time = 0:0.02:(199-1)*0.02;
+ lambda_measured.signals.values = lambda_import;
+ lambda_measured.signals.dimensions = 1;
 
 
 
 
 
-%%
 
 
 
