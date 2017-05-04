@@ -2,15 +2,22 @@
 clc
 
 %% Transfer Function Torque to lambda
-m=800;
+m=700; %600
 g=9.81;
-r=0.25;
+r=0.3; %0.3
 J=1;
-% 
+
+
+% theta1=10; %eigene Bedingungen
+% theta2=27;
+% theta3=1;
+ 
+
+
 % theta1=1.28; %dry asphalt conditions
 % theta2=23.99;
 % theta3=0.52;
- 
+
 theta1=0.86; %wet asphalt conditions
 theta2=33.82;
 theta3=0.35;
@@ -19,7 +26,7 @@ theta3=0.35;
 %  theta2=94.13;
 %  theta3=0.06;
 
-v0=1.5;
+v0=0.1;
 gear_ratio=7.13; %Getriebeübersetzung
 torque_max_engine=140; %Maximales Drehmoment vom Motor
 torque_max_onwheel=torque_max_engine*gear_ratio/2; %Maximales Moment je Hinterrad
@@ -36,7 +43,7 @@ A=2.5;
 rho=1.2;
     W_luft=0.5*cw*A*rho; % Airdrag
     
-f_r=0.015; % wheel resistance coeff.
+f_r=0.05; % wheel resistance coeff. 0.05
 F_rtot=f_r*m*g; %wheel resistance of all wheels
     
 
@@ -84,23 +91,25 @@ saturation_torque_high=max_torque*gear_ratio;
 
 
 %% Model Verification 
- 
+size_vector=199; %grösse der importierten Daten
 voltage_import=voltage;
+% sampling_frequency=1000;
+sampling_time= 0.02; %1/sampling_frequency;
 
-voltage_measured.time = 0:0.02:(199-1)*0.02;
+voltage_measured.time = 0:sampling_time:(size_vector-1)*sampling_time;
 voltage_measured.signals.values = voltage_import;
 voltage_measured.signals.dimensions = 1;
 
 
-velocity_front_import=V_front;
+velocity_front_import=v_front;
 
-velocity_front_measured.time=0:0.02:(199-1)*0.02;
+velocity_front_measured.time=0:sampling_time:(size_vector-1)*sampling_time;
 velocity_front_measured.signals.values = velocity_front_import;
 velocity_front_measured.signals.dimensions = 1;
 
-velocity_rear_import=V_rear;
+velocity_rear_import=v_rear;
 
-velocity_rear_measured.time=0:0.02:(199-1)*0.02;
+velocity_rear_measured.time=0:sampling_time:(size_vector-1)*sampling_time;
 velocity_rear_measured.signals.values = velocity_rear_import;
 velocity_rear_measured.signals.dimensions = 1;
 
@@ -108,7 +117,7 @@ velocity_rear_measured.signals.dimensions = 1;
  
  lambda_import = lambda;
  
- lambda_measured.time = 0:0.02:(199-1)*0.02;
+ lambda_measured.time = 0:sampling_time:(size_vector-1)*sampling_time;
  lambda_measured.signals.values = lambda_import;
  lambda_measured.signals.dimensions = 1;
 
