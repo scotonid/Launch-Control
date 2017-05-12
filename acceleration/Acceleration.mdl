@@ -1,5 +1,5 @@
 Model {
-  Name			  "Acceleration_R2016a"
+  Name			  "Acceleration"
   Version		  8.7
   MdlSubVersion		  "1"
   SavedCharacterEncoding  "windows-1252"
@@ -12,35 +12,35 @@ Model {
     NumTestPointedSignals   5
     TestPointedSignal {
       SignalName	      "lambda_smith"
-      FullBlockPath	      "Acceleration_R2016a/Add"
+      FullBlockPath	      "Acceleration/Add"
       LogSignal		      1
       MaxPoints		      5000
       Decimation	      2
     }
     TestPointedSignal {
       SignalName	      "lambda_target"
-      FullBlockPath	      "Acceleration_R2016a/Constant"
+      FullBlockPath	      "Acceleration/Constant"
       LogSignal		      1
       MaxPoints		      5000
       Decimation	      2
     }
     TestPointedSignal {
       SignalName	      "lambda_model"
-      FullBlockPath	      "Acceleration_R2016a/Model"
+      FullBlockPath	      "Acceleration/Model"
       LogSignal		      1
       MaxPoints		      5000
       Decimation	      2
     }
     TestPointedSignal {
       SignalName	      "lambda"
-      FullBlockPath	      "Acceleration_R2016a/Reality"
+      FullBlockPath	      "Acceleration/Reality"
       LogSignal		      1
       MaxPoints		      5000
       Decimation	      2
     }
     TestPointedSignal {
       SignalName	      "lambda_error"
-      FullBlockPath	      "Acceleration_R2016a/Sum"
+      FullBlockPath	      "Acceleration/Sum"
       LogSignal		      1
       MaxPoints		      5000
       Decimation	      2
@@ -55,7 +55,7 @@ Model {
       Type		      "Cell"
       Dimension		      2
       Cell		      "HDLSubsystem"
-      Cell		      "Acceleration_R2016a"
+      Cell		      "Acceleration"
       PropName		      "mdlProps"
     }
   }
@@ -104,7 +104,7 @@ Model {
 	LoadSaveID		"0"
 	Extents			[2817.0, 1289.0]
 	ZoomFactor		[1.2]
-	Offset			[-4.5474735088646412e-13, 46.989584962526749]
+	Offset			[-2.2737367544323206e-13, 46.989584962526841]
       }
     }
   }
@@ -114,8 +114,8 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Dominic"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri May 12 13:48:50 2017"
-  RTWModifiedTimeStamp	  416497730
+  LastModifiedDate	  "Fri May 12 13:16:31 2017"
+  RTWModifiedTimeStamp	  416495791
   ModelVersionFormat	  "1.%<AutoIncrement:150>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
@@ -166,12 +166,12 @@ Model {
     $PropName		    "DataLoggingOverride"
     $ObjectID		    8
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
-    model_		    "Acceleration_R2016a"
+    model_		    "Acceleration"
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
       Dimension		      1
-      Cell		      "Acceleration_R2016a"
+      Cell		      "Acceleration"
       PropName		      "logAsSpecifiedByModels_"
     }
     Array {
@@ -1970,7 +1970,7 @@ Model {
     }
   }
   System {
-    Name		    "Acceleration_R2016a"
+    Name		    "Acceleration"
     Location		    [-7, -7, 1652, 892]
     Open		    off
     ModelBrowserVisibility  off
@@ -2164,7 +2164,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "139::19"
-	      Tag		      "Stateflow S-Function Acceleration_R2016a 8"
+	      Tag		      "Stateflow S-Function Acceleration 8"
 	      Ports		      [2, 2]
 	      Position		      [180, 145, 230, 205]
 	      ZOrder		      10
@@ -2305,7 +2305,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "214::19"
-	      Tag		      "Stateflow S-Function Acceleration_R2016a 14"
+	      Tag		      "Stateflow S-Function Acceleration 14"
 	      Ports		      [1, 2]
 	      Position		      [180, 100, 230, 160]
 	      ZOrder		      10
@@ -2560,7 +2560,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "182::19"
-	      Tag		      "Stateflow S-Function Acceleration_R2016a 2"
+	      Tag		      "Stateflow S-Function Acceleration 2"
 	      Ports		      [1, 2]
 	      Position		      [180, 115, 230, 175]
 	      ZOrder		      10
@@ -2743,7 +2743,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "186::19"
-	      Tag		      "Stateflow S-Function Acceleration_R2016a 9"
+	      Tag		      "Stateflow S-Function Acceleration 9"
 	      Ports		      [6, 2]
 	      Position		      [180, 117, 230, 258]
 	      ZOrder		      10
@@ -2893,7 +2893,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "187::19"
-	      Tag		      "Stateflow S-Function Acceleration_R2016a 10"
+	      Tag		      "Stateflow S-Function Acceleration 10"
 	      Ports		      [1, 2]
 	      Position		      [180, 105, 230, 165]
 	      ZOrder		      10
@@ -3020,7 +3020,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "188::19"
-	      Tag		      "Stateflow S-Function Acceleration_R2016a 11"
+	      Tag		      "Stateflow S-Function Acceleration 11"
 	      Ports		      [2, 2]
 	      Position		      [180, 100, 230, 160]
 	      ZOrder		      10
@@ -3169,7 +3169,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "190::19"
-	      Tag		      "Stateflow S-Function Acceleration_R2016a 12"
+	      Tag		      "Stateflow S-Function Acceleration 12"
 	      Ports		      [2, 2]
 	      Position		      [180, 115, 230, 175]
 	      ZOrder		      10
@@ -3287,7 +3287,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "191::19"
-	      Tag		      "Stateflow S-Function Acceleration_R2016a 13"
+	      Tag		      "Stateflow S-Function Acceleration 13"
 	      Ports		      [1, 2]
 	      Position		      [180, 100, 230, 160]
 	      ZOrder		      10
@@ -3608,7 +3608,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "95::19"
-	      Tag		      "Stateflow S-Function Acceleration_R2016a 3"
+	      Tag		      "Stateflow S-Function Acceleration 3"
 	      Ports		      [1, 2]
 	      Position		      [180, 115, 230, 175]
 	      ZOrder		      10
@@ -3800,7 +3800,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "100::19"
-	      Tag		      "Stateflow S-Function Acceleration_R2016a 4"
+	      Tag		      "Stateflow S-Function Acceleration 4"
 	      Ports		      [6, 2]
 	      Position		      [180, 117, 230, 258]
 	      ZOrder		      10
@@ -3950,7 +3950,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "101::19"
-	      Tag		      "Stateflow S-Function Acceleration_R2016a 1"
+	      Tag		      "Stateflow S-Function Acceleration 1"
 	      Ports		      [1, 2]
 	      Position		      [180, 105, 230, 165]
 	      ZOrder		      10
@@ -4077,7 +4077,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "102::19"
-	      Tag		      "Stateflow S-Function Acceleration_R2016a 5"
+	      Tag		      "Stateflow S-Function Acceleration 5"
 	      Ports		      [2, 2]
 	      Position		      [180, 100, 230, 160]
 	      ZOrder		      10
@@ -4226,7 +4226,7 @@ Model {
 	      BlockType		      S-Function
 	      Name		      " SFunction "
 	      SID		      "104::19"
-	      Tag		      "Stateflow S-Function Acceleration_R2016a 6"
+	      Tag		      "Stateflow S-Function Acceleration 6"
 	      Ports		      [2, 2]
 	      Position		      [180, 115, 230, 175]
 	      ZOrder		      10
@@ -4685,7 +4685,7 @@ Model {
 Stateflow {
   machine {
     id			    1
-    name		    "Acceleration_R2016a"
+    name		    "Acceleration"
     created		    "04-Apr-2017 15:16:27"
     isLibrary		    0
     sfVersion		    80000009

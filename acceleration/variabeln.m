@@ -1,5 +1,5 @@
-clear variables
 clc
+
 
 %% Transfer Function Torque to lambda
 m=700;
