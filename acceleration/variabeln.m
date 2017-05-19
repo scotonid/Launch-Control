@@ -1,5 +1,5 @@
-clear all
 clc
+
 
 %% Transfer Function Torque to lambda
 m=700;
@@ -34,10 +34,10 @@ saturation_voltage_low=0.4;
 
 %% Matrix A, B
 
-Ta0=1000;
+Ta0=800;
 lambda_0=0.1;
 w0=200;
-Fz0=400*g;
+Fz0=450*g;
 
 a1= Ta0/(J*w0)-Fz0*r/(J*w0)*(theta1*theta2*exp(-lambda_0*theta2)-theta3)+Fz0*r/(J*w0)*(theta1*(1-exp(-lambda_0*theta2)-lambda_0*theta2*exp(-lambda_0*theta2))-2*lambda_0*theta3)-Fz0/(m*r*w0)*(theta1*theta2*exp(-lambda_0*theta2)-theta3);
 
@@ -52,25 +52,34 @@ A= a1;
 B= b1;
 
 
-Q=100;
+Q=1000;
 
-R=0.001;
+R=0.01;
 
 lambda_target=0.1;
-saturation_integrator_high=0.5;
-
-K_lqr= lqr(A,B,Q,R)
 
 
+K_lqr= lqr(A,B,Q,R);
+K_i=1000;
+
+
+
+ 
 max_torque=140; %Max. Drehmoment Motor
 saturation_torque_high=max_torque*gear_ratio;
 
 
 
+
 %% 
 
+<<<<<<< HEAD
 %sim('Acceleration',60)
 %Simulink.sdi.view
+=======
+sim('Acceleration',5)
+Simulink.sdi.view
+>>>>>>> ce6c728332c549866219a9e58129102afa78f8bd
 
 
 
