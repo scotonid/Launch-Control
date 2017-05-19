@@ -5,22 +5,22 @@ clc
 m=700; %600
 g=9.81;
 r=0.3; %0.3
-J=1;
+J=1; %1
+
+% 
+% theta1=1.55; %eigene Bedingungen
+% theta2=28.55;
+% theta3=0.6;
+%  
 
 
-% theta1=10; %eigene Bedingungen
-% theta2=27;
-% theta3=1;
- 
+theta1=1.28; %dry asphalt conditions
+theta2=23.99;
+theta3=0.52;
 
-
-% theta1=1.28; %dry asphalt conditions
-% theta2=23.99;
-% theta3=0.52;
-
-theta1=0.86; %wet asphalt conditions
-theta2=33.82;
-theta3=0.35;
+% theta1=0.86; %wet asphalt conditions
+% theta2=33.82;
+% theta3=0.35;
  
 %  theta1=0.19; %snow conditions
 %  theta2=94.13;
@@ -34,11 +34,11 @@ v_max=100/3.6; %Höchstgeschwindigkeit
 power_engine=45000; %Leistung Motor --> noch nachfragen
 
 h_CoM=0.5; %Hight Center of Mass
-l_f=1.5; 
-l_r=1.5;
+l_f=1.5; %1.5
+l_r=1;   %1.5
     l=l_f+l_r; %Wheelbase
     
-cw=0.3;
+cw=0.3; %0.3
 A=2.5;
 rho=1.2;
     W_luft=0.5*cw*A*rho; % Airdrag
@@ -86,28 +86,31 @@ K_lqr= lqr(A,B,Q,R);
  
 max_torque=140; %Max. Drehmoment Motor
 saturation_torque_high=max_torque*gear_ratio;
+%%
 
-
+x = [0,0 ; 250,1050 ; 250,1051 ; 1173,3050 ; 1173 3150];
+[~,idx] = unique(x(:,1));
+out = x(idx,:)
 
 
 %% Model Verification 
-size_vector=199; %grösse der importierten Daten
-voltage_import=voltage;
-% sampling_frequency=1000;
-sampling_time= 0.02; %1/sampling_frequency;
+size_vector=2013; %grösse der importierten Daten
+sampling_frequency=1000;
+sampling_time= 1/sampling_frequency; %1/sampling_frequency;
 
+voltage_import=cutrun5bearbeitet(:,2);
 voltage_measured.time = 0:sampling_time:(size_vector-1)*sampling_time;
 voltage_measured.signals.values = voltage_import;
 voltage_measured.signals.dimensions = 1;
 
 
-velocity_front_import=v_front;
+velocity_front_import=cutrun5bearbeitet(:,4);
 
 velocity_front_measured.time=0:sampling_time:(size_vector-1)*sampling_time;
 velocity_front_measured.signals.values = velocity_front_import;
 velocity_front_measured.signals.dimensions = 1;
 
-velocity_rear_import=v_rear;
+velocity_rear_import=cutrun5bearbeitet(:,3);
 
 velocity_rear_measured.time=0:sampling_time:(size_vector-1)*sampling_time;
 velocity_rear_measured.signals.values = velocity_rear_import;
@@ -115,7 +118,7 @@ velocity_rear_measured.signals.dimensions = 1;
 
 
  
- lambda_import = lambda;
+ lambda_import = cutrun5bearbeitet(:,1);
  
  lambda_measured.time = 0:sampling_time:(size_vector-1)*sampling_time;
  lambda_measured.signals.values = lambda_import;
@@ -126,6 +129,10 @@ velocity_rear_measured.signals.dimensions = 1;
 
 
 
+
+
+%sim('Acceleration',60)
+%Simulink.sdi.view
 
 
 
