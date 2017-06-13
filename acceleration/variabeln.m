@@ -1,5 +1,11 @@
-clear variables
 clc
+
+%% EW constants for ultra basic HIL plant
+
+v0                 = 0; % Initial vehicle speed
+wheel_radius = 0.3; % Wheel radius
+k                   = 1e-2; % Motor losses (W/(N*M)^2)
+t_torque        = 0.02; % Electric motor time constant
 
 %% Transfer Function Torque to lambda
 m=700;
@@ -73,8 +79,8 @@ saturation_torque_high=max_torque*gear_ratio;
 
 %% 
 
-sim('Acceleration',5)
-Simulink.sdi.view
+% sim('Acceleration',5)
+% Simulink.sdi.view
 
 
 

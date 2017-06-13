@@ -1,0 +1,597 @@
+(*
+ *
+ * File: VCU_BMS_01.exp
+ *
+ * IEC 61131-3 Structured Text (ST) code generated for subsystem "VCU_BMS_01/Controller/IO"
+ *
+ * Model name                      : VCU_BMS_01
+ * Model version                   : 1.464
+ * Model creator                   : MathWorks
+ * Model last modified by          : erik.wilhelm
+ * Model last modified on          : Fri May 12 15:19:30 2017
+ * Model sample time               : 0.01s
+ * Subsystem name                  : VCU_BMS_01/Controller/IO
+ * Subsystem sample time           : 0.01s
+ * Simulink PLC Coder version      : 2.1 (R2016a) 10-Feb-2016
+ * ST code generated on            : Fri May 12 15:21:50 2017
+ *
+ * Target IDE selection            : 3S CoDeSys 2.3
+ * Test Bench included             : No
+ *
+ * Model Description               : 
+ * Power-Split Hybrid Transmission
+ * 
+ * This example shows the basic architecture of a power-split hybrid
+ * transmission. The planetary gear, along with the motor and generator,
+ * acts like a variable ratio gear. In this test, the vehicle accelerates from
+ * 15 m/s to 20 m/s, and then decelerates back to 15 m/s. The power
+ * management strategy uses just electrical power to effect the
+ * maneuver, the combustion engine only delivering the power required to
+ * maintain a steady 15 m/s.
+ * 
+ * Losses for the motor, generator, battery and planetary gear are
+ * modeled. You can use this system-level model to gain understanding of
+ * system performance, and to support design of the power management
+ * strategy. The example can be directly compared with the parallel hybrid
+ * example sdl_parallel_hybrid and the series hybrid example
+ * sdl_series_hybrid.
+ * 
+ * 
+ * Copyright 2008-2016 The MathWorks, Inc.
+ * 
+ *
+ *)
+FUNCTION_BLOCK IO
+VAR_INPUT
+    ssMethodType: SINT;
+    accel_A: REAL;
+    accel_B: REAL;
+    brake: REAL;
+    max_acc_A: REAL;
+    min_acc_A: REAL;
+    max_acc_B: REAL;
+    min_acc_B: REAL;
+    max_brake: REAL;
+    min_brake: REAL;
+    brake_thresh: REAL;
+    acc_red_thresh: REAL;
+    regen_scale: REAL;
+    engine_brake_frac: REAL;
+    state: REAL;
+    brake_fluid: REAL;
+    pbrake: REAL;
+    blink_left: REAL;
+    blink_right: REAL;
+    e_stop: REAL;
+    battery_SOC: REAL;
+    motor_rpm: REAL;
+    brights_sig: REAL;
+    max_dis_curr: REAL;
+    max_chr_curr: REAL;
+    tau_req: REAL;
+    mot_en_rpm: REAL;
+    motor_curr: BOOL;
+    dcdc_curr: BOOL;
+    batt_v: BOOL;
+    reset_cyc: BOOL;
+    prev_mot_curr: REAL;
+    prev_dcdc_curr: REAL;
+    prev_battV_max: REAL;
+    prev_battV_min: REAL;
+    throttle_min: REAL;
+    brake_min: REAL;
+    front_left_V: REAL;
+    front_right_V: REAL;
+    rear_left_V: REAL;
+    rear_right_V: REAL;
+END_VAR
+VAR_OUTPUT
+    torque_signal: REAL;
+    brake_switch: REAL;
+    IO_error: REAL;
+    brake_light_out: BOOL;
+    pbrake_out: BOOL;
+    blink_left_out: BOOL;
+    blink_right_out: BOOL;
+    SOC_out_disp: REAL;
+    trip_distance: REAL;
+    velocity: REAL;
+    pump_control_out: BOOL;
+    DC_Vlim_Mot: REAL;
+    DC_Vlim_Gen: REAL;
+    DC_I_lim_Mot: REAL;
+    DC_I_lim_Gen: REAL;
+    brights_out: BOOL;
+    BMS_ready: BOOL;
+    charge: BOOL;
+    DMC_engage: BOOL;
+    max_mot_curr_cyc: REAL;
+    max_dc_dc_curr_cyc: REAL;
+    max_Vbatt_cyc: REAL;
+    min_Vbatt_cyc: REAL;
+    fan_control_out: BOOL;
+    acc_debug: REAL;
+END_VAR
+VAR
+    c_DiscreteTimeIntegrator_DS: REAL;
+END_VAR
+VAR_TEMP
+    rtb_Switch2: REAL;
+    rtb_Switch: REAL;
+    rtb_product1: REAL;
+    rtb_Divide_k: REAL;
+    rtb_Switch2_a: REAL;
+    rtb_RelationalOperator1_a: BOOL;
+    rtb_RelationalOperator: BOOL;
+    rtb_Compare_el: BOOL;
+    rtb_Compare_c: BOOL;
+    rtb_DiscreteTimeIntegrator: REAL;
+END_VAR
+CASE ssMethodType OF
+    SS_INITIALIZE: 
+        
+        (* InitializeConditions for DiscreteIntegrator: '<S23>/Discrete-Time Integrator' *)
+        c_DiscreteTimeIntegrator_DS := 0.0;
+    SS_STEP: 
+        
+        (* Product: '<S12>/Divide' incorporates:
+         *  Inport: '<Root>/brake'
+         *  Inport: '<Root>/max_brake'
+         *  Inport: '<Root>/min_brake'
+         *  Sum: '<S12>/Sum'
+         *  Sum: '<S12>/subract' *)
+        rtb_Switch2 := (brake - min_brake) / (max_brake - min_brake);
+        
+        (* Product: '<S25>/Divide1' incorporates:
+         *  Constant: '<S25>/Constant6'
+         *  Inport: '<Root>/brake_min'
+         *  Sum: '<S25>/Sum3'
+         *  Sum: '<S25>/Sum4' *)
+        rtb_Switch := (rtb_Switch2 - brake_min) / (1.0 - brake_min);
+        
+        (* Product: '<S23>/product1' incorporates:
+         *  Constant: '<S23>/rev to rad'
+         *  Constant: '<S23>/sec per min'
+         *  Constant: '<S23>/transmission1'
+         *  Constant: '<S23>/wheel_radius'
+         *  Gain: '<S23>/Gain'
+         *  Inport: '<Root>/motor_RPM'
+         *  Product: '<S23>/Divide'
+         *  Product: '<S23>/Divide1'
+         *  Product: '<S23>/Product' *)
+        rtb_product1 := (((( -motor_rpm) * 6.28318548) / 60.0) / 9.59) * 0.29;
+        
+        (* Product: '<S21>/Divide' incorporates:
+         *  Inport: '<Root>/accel_A'
+         *  Inport: '<Root>/max_acc_A'
+         *  Inport: '<Root>/min_acc_A'
+         *  Sum: '<S21>/Sum'
+         *  Sum: '<S21>/subract' *)
+        rtb_Divide_k := (accel_A - min_acc_A) / (max_acc_A - min_acc_A);
+        
+        (* Product: '<S22>/Divide' incorporates:
+         *  Inport: '<Root>/accel_B'
+         *  Inport: '<Root>/max_acc_B'
+         *  Inport: '<Root>/min_acc_B'
+         *  Sum: '<S22>/Sum'
+         *  Sum: '<S22>/subract' *)
+        rtb_Switch2_a := (accel_B - min_acc_B) / (max_acc_B - min_acc_B);
+        
+        (* RelationalOperator: '<S11>/Relational Operator1' incorporates:
+         *  Inport: '<Root>/acc_red_thresh'
+         *  Sum: '<S11>/Subtract' *)
+        rtb_RelationalOperator1_a := (rtb_Divide_k - rtb_Switch2_a) > acc_red_thresh;
+        
+        (* Switch: '<S11>/Switch' incorporates:
+         *  Constant: '<S11>/Constant'
+         *  Constant: '<S11>/Constant1'
+         *  Product: '<S11>/Divide'
+         *  Sum: '<S11>/Add' *)
+        IF rtb_RelationalOperator1_a THEN 
+            rtb_DiscreteTimeIntegrator := 0.0;
+        ELSE 
+            rtb_DiscreteTimeIntegrator := (rtb_Divide_k + rtb_Switch2_a) / 2.0;
+        END_IF;
+        (* End of Switch: '<S11>/Switch' *)
+        
+        (* RelationalOperator: '<S1>/Relational Operator' incorporates:
+         *  Inport: '<Root>/brake_thresh' *)
+        rtb_RelationalOperator := rtb_Switch2 > brake_thresh;
+        
+        (* Switch: '<S1>/Switch' incorporates:
+         *  Constant: '<S1>/Constant'
+         *  Constant: '<S1>/Constant2' *)
+        IF rtb_RelationalOperator THEN 
+            rtb_Switch2 := 1.0;
+        ELSE 
+            rtb_Switch2 := 0.0;
+        END_IF;
+        (* End of Switch: '<S1>/Switch' *)
+        
+        (* Outport: '<Root>/brake_switch' *)
+        brake_switch := rtb_Switch2;
+        
+        (* RelationalOperator: '<S41>/Compare' incorporates:
+         *  Constant: '<S41>/Constant' *)
+        rtb_Compare_el := rtb_Switch < 0.0;
+        
+        (* RelationalOperator: '<S42>/Compare' incorporates:
+         *  Constant: '<S42>/Constant' *)
+        rtb_Compare_c := rtb_Switch > 1.0;
+        
+        (* Product: '<S25>/Divide' incorporates:
+         *  Constant: '<S25>/Constant2'
+         *  Inport: '<Root>/throttle_min'
+         *  Sum: '<S25>/Sum1'
+         *  Sum: '<S25>/Sum2' *)
+        rtb_Switch2 := (rtb_DiscreteTimeIntegrator - throttle_min) / (1.0 - throttle_min);
+        
+        (* Switch: '<S25>/Switch4' incorporates:
+         *  Constant: '<S25>/Constant3' *)
+        IF  NOT (rtb_Switch > 0.01) THEN 
+            rtb_Switch := 0.0;
+        END_IF;
+        (* End of Switch: '<S25>/Switch4' *)
+        
+        (* Switch: '<S25>/Switch5' incorporates:
+         *  Constant: '<S25>/Constant4'
+         *  Gain: '<S25>/Gain1'
+         *  Inport: '<Root>/regen_scale'
+         *  Product: '<S25>/Product' *)
+        IF rtb_product1 > 1.38888884 THEN 
+            rtb_Switch :=  -(rtb_Switch * regen_scale);
+        ELSE 
+            rtb_Switch := 0.0;
+        END_IF;
+        (* End of Switch: '<S25>/Switch5' *)
+        
+        (* Switch: '<S25>/Switch6' incorporates:
+         *  Constant: '<S25>/Constant4'
+         *  Constant: '<S40>/Constant'
+         *  Inport: '<Root>/state'
+         *  RelationalOperator: '<S40>/Compare' *)
+        IF state = 3.0 THEN 
+            rtb_Switch := 0.0;
+        END_IF;
+        (* End of Switch: '<S25>/Switch6' *)
+        
+        (* Switch: '<S25>/Switch3' incorporates:
+         *  Constant: '<S25>/Constant5' *)
+        IF  NOT (rtb_Switch2 > 0.01) THEN 
+            rtb_Switch2 := 0.0;
+        END_IF;
+        (* End of Switch: '<S25>/Switch3' *)
+        
+        (* Switch: '<S25>/Switch' *)
+        IF  NOT rtb_RelationalOperator THEN 
+            rtb_Switch := rtb_Switch2;
+        END_IF;
+        (* End of Switch: '<S25>/Switch' *)
+        
+        (* Switch: '<S25>/Switch1' incorporates:
+         *  Constant: '<S25>/Constant'
+         *  Gain: '<S25>/Gain'
+         *  Inport: '<Root>/engine_brake_frac' *)
+        IF rtb_product1 > 2.77777767 THEN 
+            rtb_Switch2 :=  -engine_brake_frac;
+        ELSE 
+            rtb_Switch2 := 0.0;
+        END_IF;
+        (* End of Switch: '<S25>/Switch1' *)
+        
+        (* Switch: '<S25>/Switch2' incorporates:
+         *  Constant: '<S25>/Constant1' *)
+        IF rtb_Switch > 0.0 THEN 
+            rtb_Switch2 := 0.0;
+        END_IF;
+        (* End of Switch: '<S25>/Switch2' *)
+        
+        (* expy= *)
+        (* y = 1-2/(1+exp(5*u)); *)
+        (* MATLAB Function 'IO/torque_signal_logic/MATLAB fcn driver experience': '<S43>:1' *)
+        (* step *)
+        (* if u>0.5 *)
+        (* y=u; *)
+        (* else *)
+        (* y=0.4*u; *)
+        (* end *)
+        (* sigmoid *)
+        (* inp=(-6+12*u); *)
+        (* y=1/(1+exp(-inp)); *)
+        (* pass through *)
+        (* '<S43>:1:19' y=u; *)
+        (* exp *)
+        (* '<S43>:1:22' y=(exp(1.3*u)-1)/exp(1) *)
+        
+        (* Outport: '<Root>/torque_signal' incorporates:
+         *  MATLAB Function: '<S25>/MATLAB fcn driver experience'
+         *  Sum: '<S25>/Sum' *)
+        torque_signal := (EXP((rtb_Switch + rtb_Switch2) * 1.3) - 1.0) / 2.71828175;
+        
+        (* Switch: '<S13>/Switch' incorporates:
+         *  Constant: '<S13>/Constant'
+         *  Constant: '<S13>/Constant1'
+         *  Constant: '<S34>/Constant'
+         *  Constant: '<S35>/Constant'
+         *  Constant: '<S36>/Constant'
+         *  Constant: '<S37>/Constant'
+         *  Logic: '<S11>/Logical Operator'
+         *  RelationalOperator: '<S34>/Compare'
+         *  RelationalOperator: '<S35>/Compare'
+         *  RelationalOperator: '<S36>/Compare'
+         *  RelationalOperator: '<S37>/Compare' *)
+        IF (((rtb_RelationalOperator1_a OR (rtb_Divide_k < 0.0)) OR (rtb_Divide_k > 1.0)) OR (rtb_Switch2_a < 0.0)) OR (rtb_Switch2_a > 1.0) THEN 
+            rtb_Switch2_a := 1.0;
+        ELSE 
+            rtb_Switch2_a := 0.0;
+        END_IF;
+        (* End of Switch: '<S13>/Switch' *)
+        
+        (* Switch: '<S13>/Switch1' incorporates:
+         *  Constant: '<S13>/Constant2'
+         *  Logic: '<S25>/Logical Operator' *)
+        IF rtb_Compare_el OR rtb_Compare_c THEN 
+            rtb_Switch2_a := 2.0;
+        END_IF;
+        (* End of Switch: '<S13>/Switch1' *)
+        
+        (* Switch: '<S13>/Switch2' incorporates:
+         *  Constant: '<S13>/Constant3'
+         *  Constant: '<S39>/Constant'
+         *  Inport: '<Root>/state'
+         *  Logic: '<S24>/Logical Operator'
+         *  RelationalOperator: '<S24>/Relational Operator1'
+         *  RelationalOperator: '<S39>/Compare' *)
+        IF (state = 2.0) AND ( NOT rtb_RelationalOperator) THEN 
+            rtb_Switch2_a := 3.0;
+        END_IF;
+        (* End of Switch: '<S13>/Switch2' *)
+        
+        (* Switch: '<S13>/Switch3' incorporates:
+         *  Constant: '<S13>/Constant4'
+         *  Constant: '<S15>/Constant'
+         *  Inport: '<Root>/brake_fluid'
+         *  RelationalOperator: '<S15>/Relational Operator1' *)
+        IF brake_fluid > 0.0 THEN 
+            rtb_Switch2_a := 4.0;
+        END_IF;
+        (* End of Switch: '<S13>/Switch3' *)
+        
+        (* Switch: '<S13>/Switch4' incorporates:
+         *  Constant: '<S13>/Constant5'
+         *  Constant: '<S14>/Constant'
+         *  Inport: '<Root>/e_stop'
+         *  RelationalOperator: '<S14>/Relational Operator1' *)
+        IF e_stop > 0.0 THEN 
+            rtb_Switch2_a := 5.0;
+        END_IF;
+        (* End of Switch: '<S13>/Switch4' *)
+        
+        (* Outport: '<Root>/IO_error' *)
+        IO_error := rtb_Switch2_a;
+        
+        (* Outport: '<Root>/brake_light_out' *)
+        brake_light_out := rtb_RelationalOperator;
+        
+        (* Outport: '<Root>/pbrake_out' incorporates:
+         *  Constant: '<S2>/Constant'
+         *  Inport: '<Root>/pbrake'
+         *  RelationalOperator: '<S2>/Compare' *)
+        pbrake_out := pbrake > 0.0;
+        
+        (* Outport: '<Root>/blink_left_out' incorporates:
+         *  Constant: '<S4>/Constant'
+         *  Inport: '<Root>/blink_left'
+         *  RelationalOperator: '<S4>/Compare' *)
+        blink_left_out := blink_left > 0.0;
+        
+        (* Outport: '<Root>/blink_right_out' incorporates:
+         *  Constant: '<S5>/Constant'
+         *  Inport: '<Root>/blink_right'
+         *  RelationalOperator: '<S5>/Compare' *)
+        blink_right_out := blink_right > 0.0;
+        
+        (* Outport: '<Root>/SOC_out_disp' incorporates:
+         *  Inport: '<Root>/battery_SOC' *)
+        SOC_out_disp := battery_SOC;
+        
+        (* Outport: '<Root>/velocity' *)
+        velocity := rtb_product1;
+        
+        (* Switch: '<S9>/Switch1' incorporates:
+         *  Constant: '<S28>/Constant'
+         *  Constant: '<S29>/Constant'
+         *  Constant: '<S30>/Constant'
+         *  Constant: '<S31>/Constant'
+         *  Constant: '<S32>/Constant'
+         *  Inport: '<Root>/state'
+         *  Logic: '<S9>/Logical Operator'
+         *  RelationalOperator: '<S28>/Compare'
+         *  RelationalOperator: '<S29>/Compare'
+         *  RelationalOperator: '<S30>/Compare'
+         *  RelationalOperator: '<S31>/Compare'
+         *  RelationalOperator: '<S32>/Compare' *)
+        IF ((((state = 0.0) OR (state = 1.0)) OR (state = 7.0)) OR (state = 8.0)) OR (state = 9.0) THEN 
+            (* Outport: '<Root>/pump_control_out' incorporates:
+             *  Constant: '<S9>/Constant7' *)
+            pump_control_out := FALSE;
+        ELSE 
+            (* Outport: '<Root>/pump_control_out' incorporates:
+             *  Constant: '<S9>/Constant1' *)
+            pump_control_out := TRUE;
+        END_IF;
+        (* End of Switch: '<S9>/Switch1' *)
+        
+        (* Outport: '<Root>/DC_Vlim_Mot' incorporates:
+         *  Constant: '<S1>/Constant3' *)
+        DC_Vlim_Mot := 280.0;
+        
+        (* Outport: '<Root>/DC_Vlim_Gen' incorporates:
+         *  Constant: '<S1>/Constant4' *)
+        DC_Vlim_Gen := 340.0;
+        
+        (* Outport: '<Root>/DC_I_lim_Mot' incorporates:
+         *  Constant: '<S1>/Constant5' *)
+        DC_I_lim_Mot := 200.0;
+        
+        (* Outport: '<Root>/DC_I_lim_Gen' incorporates:
+         *  Constant: '<S1>/Constant6' *)
+        DC_I_lim_Gen := 50.0;
+        
+        (* Outport: '<Root>/brights_out' incorporates:
+         *  Constant: '<S3>/Constant'
+         *  Inport: '<Root>/brights_sig'
+         *  RelationalOperator: '<S3>/Compare' *)
+        brights_out := brights_sig > 6000.0;
+        
+        (* Outport: '<Root>/BMS_ready' incorporates:
+         *  Constant: '<S6>/Constant'
+         *  Inport: '<Root>/max_dis_curr'
+         *  RelationalOperator: '<S6>/Compare' *)
+        BMS_ready := max_dis_curr > 0.0;
+        
+        (* Outport: '<Root>/charge' incorporates:
+         *  Constant: '<S7>/Constant'
+         *  Inport: '<Root>/max_chr_curr'
+         *  RelationalOperator: '<S7>/Compare' *)
+        charge := max_chr_curr > 0.0;
+        
+        (* Outport: '<Root>/DMC_engage' incorporates:
+         *  Abs: '<S20>/Abs'
+         *  Abs: '<S20>/Abs1'
+         *  Constant: '<S38>/Constant'
+         *  Inport: '<Root>/mot_en_rpm'
+         *  Inport: '<Root>/state'
+         *  Inport: '<Root>/tau_req'
+         *  Logic: '<S20>/Logical Operator'
+         *  RelationalOperator: '<S20>/Relational Operator1'
+         *  RelationalOperator: '<S38>/Compare' *)
+        DMC_engage := (ABS(tau_req) > 0.0) OR (ABS(state) > mot_en_rpm);
+        
+        (* Switch: '<S16>/Switch1' incorporates:
+         *  Inport: '<Root>/mot_curr'
+         *  Inport: '<Root>/prev_mot_curr'
+         *  RelationalOperator: '<S16>/Relational Operator1' *)
+        IF BOOL_TO_REAL(motor_curr) > prev_mot_curr THEN 
+            rtb_Switch2_a := BOOL_TO_REAL(motor_curr);
+        ELSE 
+            rtb_Switch2_a := prev_mot_curr;
+        END_IF;
+        (* End of Switch: '<S16>/Switch1' *)
+        
+        (* Switch: '<S16>/Switch2' incorporates:
+         *  Constant: '<S16>/Constant1'
+         *  Inport: '<Root>/reset_cyc' *)
+        IF reset_cyc THEN 
+            rtb_Switch2_a := 0.0;
+        END_IF;
+        (* End of Switch: '<S16>/Switch2' *)
+        
+        (* Outport: '<Root>/max_mot_curr_cyc' *)
+        max_mot_curr_cyc := rtb_Switch2_a;
+        
+        (* Switch: '<S17>/Switch1' incorporates:
+         *  Inport: '<Root>/dcdc_curr'
+         *  Inport: '<Root>/prev_dcdc_curr'
+         *  RelationalOperator: '<S17>/Relational Operator1' *)
+        IF BOOL_TO_REAL(dcdc_curr) > prev_dcdc_curr THEN 
+            rtb_Switch2_a := BOOL_TO_REAL(dcdc_curr);
+        ELSE 
+            rtb_Switch2_a := prev_dcdc_curr;
+        END_IF;
+        (* End of Switch: '<S17>/Switch1' *)
+        
+        (* Switch: '<S17>/Switch2' incorporates:
+         *  Constant: '<S17>/Constant1'
+         *  Inport: '<Root>/reset_cyc' *)
+        IF reset_cyc THEN 
+            rtb_Switch2_a := 0.0;
+        END_IF;
+        (* End of Switch: '<S17>/Switch2' *)
+        
+        (* Outport: '<Root>/max_dc_dc_curr_cyc' *)
+        max_dc_dc_curr_cyc := rtb_Switch2_a;
+        
+        (* Switch: '<S18>/Switch1' incorporates:
+         *  Inport: '<Root>/batt_v'
+         *  Inport: '<Root>/prev_battV_max'
+         *  RelationalOperator: '<S18>/Relational Operator1' *)
+        IF BOOL_TO_REAL(batt_v) > prev_battV_max THEN 
+            rtb_Switch2_a := BOOL_TO_REAL(batt_v);
+        ELSE 
+            rtb_Switch2_a := prev_battV_max;
+        END_IF;
+        (* End of Switch: '<S18>/Switch1' *)
+        
+        (* Switch: '<S18>/Switch2' incorporates:
+         *  Constant: '<S18>/Constant1'
+         *  Inport: '<Root>/reset_cyc' *)
+        IF reset_cyc THEN 
+            rtb_Switch2_a := 0.0;
+        END_IF;
+        (* End of Switch: '<S18>/Switch2' *)
+        
+        (* Outport: '<Root>/max_Vbatt_cyc' *)
+        max_Vbatt_cyc := rtb_Switch2_a;
+        
+        (* Switch: '<S19>/Switch1' incorporates:
+         *  Inport: '<Root>/batt_v'
+         *  Inport: '<Root>/prev_battV_min'
+         *  RelationalOperator: '<S19>/Relational Operator1' *)
+        IF BOOL_TO_REAL(batt_v) < prev_battV_min THEN 
+            rtb_Switch2_a := BOOL_TO_REAL(batt_v);
+        ELSE 
+            rtb_Switch2_a := prev_battV_min;
+        END_IF;
+        (* End of Switch: '<S19>/Switch1' *)
+        
+        (* Switch: '<S19>/Switch2' incorporates:
+         *  Constant: '<S19>/Constant1'
+         *  Inport: '<Root>/reset_cyc' *)
+        IF reset_cyc THEN 
+            rtb_Switch2_a := 400.0;
+        END_IF;
+        (* End of Switch: '<S19>/Switch2' *)
+        
+        (* Outport: '<Root>/min_Vbatt_cyc' *)
+        min_Vbatt_cyc := rtb_Switch2_a;
+        
+        (* Switch: '<S10>/Switch1' incorporates:
+         *  Constant: '<S33>/Constant'
+         *  Inport: '<Root>/state'
+         *  RelationalOperator: '<S33>/Compare' *)
+        IF state = 6.0 THEN 
+            (* Outport: '<Root>/fan_control_out' incorporates:
+             *  Constant: '<S10>/Constant7' *)
+            fan_control_out := TRUE;
+        ELSE 
+            (* Outport: '<Root>/fan_control_out' incorporates:
+             *  Constant: '<S10>/Constant1' *)
+            fan_control_out := FALSE;
+        END_IF;
+        (* End of Switch: '<S10>/Switch1' *)
+        
+        (* Outport: '<Root>/acc_debug' *)
+        acc_debug := rtb_DiscreteTimeIntegrator;
+        
+        (* Outport: '<Root>/trip_distance' incorporates:
+         *  DiscreteIntegrator: '<S23>/Discrete-Time Integrator' *)
+        trip_distance := c_DiscreteTimeIntegrator_DS;
+        
+        (* MATLAB Function 'IO/Controller/Dynamic': '<S26>:1' *)
+        (* '<S26>:1:5' A1=Ta0/(J*w)-Fz0*r/(J*w)*(theta1*theta2*exp(-lambda*theta2)-theta3)+Fz0*r/(J*w)*(theta1*(1-exp(-lambda*theta2)-lambda*theta2*exp(-lambda*theta2))-2*lambda*theta3)-Fz0/(m*r*w)*(theta1*theta2*exp(-lambda*theta2)-theta3); *)
+        (* '<S26>:1:7' B1=1/(J*w)-lambda/(J*w); *)
+        (* '<S26>:1:10' k_lqr_dynamic =(A1+B1*sqrt(A1^2+B1^2*Q/R))/B1; *)
+        
+        (* MATLAB Function 'IO/Controller/voltage to torque': '<S27>:1' *)
+        (* '<S27>:1:3' torque = a*voltage+b; *)
+        
+        (* Update for DiscreteIntegrator: '<S23>/Discrete-Time Integrator' incorporates:
+         *  Abs: '<S23>/Abs' *)
+        c_DiscreteTimeIntegrator_DS := (0.01 * ABS(rtb_product1)) + c_DiscreteTimeIntegrator_DS;
+END_CASE;
+END_FUNCTION_BLOCK
+VAR_GLOBAL CONSTANT
+    SS_INITIALIZE: SINT := 0;
+    SS_STEP: SINT := 1;
+END_VAR
