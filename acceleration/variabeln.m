@@ -60,7 +60,7 @@ lambda_target=0.1;
 
 
 K_lqr= lqr(A,B,Q,R);
-K_i=1000;
+K_i=10000;
 
 
 
