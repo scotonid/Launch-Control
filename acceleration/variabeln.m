@@ -1,12 +1,5 @@
 clc
 
-%% EW constants for ultra basic HIL plant
-
-v0                 = 0; % Initial vehicle speed
-wheel_radius = 0.3; % Wheel radius
-k                   = 1e-2; % Motor losses (W/(N*M)^2)
-t_torque        = 0.02; % Electric motor time constant
-
 %% Transfer Function Torque to lambda
 m=700;
 g=9.81;
@@ -30,13 +23,16 @@ A=2.5;
 rho=1.2;
     W_luft=0.5*cw*A*rho; % Airdrag
     
+f_r=0.05; % wheel resistance coeff. 0.05
+F_rtot=f_r*m*g; %wheel resistance of all wheels
+    
 
 %% Transfer function voltage to torque
 
 a=31.111;
 b=-12.44444; %f(x)=ax+b
-saturation_voltage_high=4.9;
-saturation_voltage_low=0.4;
+saturation_torque_high=220;
+% saturation_voltage_low=0;
 
 %% Matrix A, B
 
@@ -53,11 +49,6 @@ b1=1/(J*w0)-lambda_0/(J*w0);
 
 %% Controller LQR
 
-A= a1;
-
-B= b1;
-
-
 Q=1000;
 
 R=0.01;
@@ -65,22 +56,17 @@ R=0.01;
 lambda_target=0.1;
 
 
-K_lqr= lqr(A,B,Q,R);
-K_i=1000;
-
-
+K_lqr= lqr(a1,b1,Q,R);
+K_i=100;
 
  
-max_torque=140; %Max. Drehmoment Motor
+max_torque=220; %Max. Drehmoment Motor
 saturation_torque_high=max_torque*gear_ratio;
 
 
 
 
 %% 
-
-% sim('Acceleration',5)
-% Simulink.sdi.view
-
-
+sim('Acceleration',5)
+Simulink.sdi.view
 
