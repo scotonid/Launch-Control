@@ -49,9 +49,9 @@ b1=1/(J*w0)-lambda_0/(J*w0);
 
 %% Controller LQR
 
-Q=1000;
+Q=100;
 
-R=0.01;
+R=10;
 
 lambda_target=0.1;
 
@@ -61,7 +61,6 @@ K_i=100;
 
  
 max_torque=220; %Max. Drehmoment Motor
-saturation_torque_high=max_torque*gear_ratio;
 
 
 
