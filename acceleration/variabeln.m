@@ -40,7 +40,7 @@ b=-12.44444; %f(x)=ax+b
 
 %% Matrix A, B
 
-Ta0=1000;
+Ta0=800;
 lambda_0=0.1;
 w0=200;
 Fz0=450*g;
@@ -55,15 +55,15 @@ b1=1/(J*w0)-lambda_0/(J*w0);
 
 %% Controller LQR
 
-Q=10;
+Q=100;
 
-R=1;
+R=10;
 
 lambda_target=0.1;
 
 
 K_lqr= lqr(a1,b1,Q,R);
-K_i=1;
+K_i=100;
 
 
 max_torque=120; %Max. Drehmoment Motor
