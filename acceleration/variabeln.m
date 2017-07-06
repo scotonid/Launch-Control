@@ -72,28 +72,3 @@ saturation_torque_high=max_torque*gear_ratio;
 %% 
 % sim('Acceleration',5)
 % Simulink.sdi.view
-
-
-% 
-% function lambda_predicted = fcn(lambda,r,J,mu, v_pnk, Fz0, Ta0, w0)
-% 
-% 
-% 
-% %% Initial State
-% 
-% F=-v_pnk/(w0*r)+(1-lambda)/w0*Ta0/J-(1-lambda)/w0*r*Fz0*mu/J;
-% 
-% time = 0.000001;
-% %% Initializing
-% nSteps = 0.2/time;
-% L=zeros(1,nSteps);
-% L(1)=lambda;
-% 
-% 
-% %% Predicting
-% for k = 2:nSteps
-%      L(k)= L(k-1) + F*time;
-% end
-%      
-% lambda_predicted = L(nSteps);
-
