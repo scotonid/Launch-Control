@@ -36,10 +36,12 @@ saturation_torque_high=220;
 
 %% Matrix A, B
 
-Ta0=800;
+Ta0=1000;
 lambda_0=0.1;
 w0=200;
 Fz0=450*g;
+mu=0.8;
+v_pnk=3;
 
 a1= Ta0/(J*w0)-Fz0*r/(J*w0)*(theta1*theta2*exp(-lambda_0*theta2)-theta3)+Fz0*r/(J*w0)*(theta1*(1-exp(-lambda_0*theta2)-lambda_0*theta2*exp(-lambda_0*theta2))-2*lambda_0*theta3)-Fz0/(m*r*w0)*(theta1*theta2*exp(-lambda_0*theta2)-theta3);
 
@@ -49,15 +51,15 @@ b1=1/(J*w0)-lambda_0/(J*w0);
 
 %% Controller LQR
 
-Q=100;
+Q=1;
 
-R=10;
+R=0.1;
 
 lambda_target=0.1;
 
 
 K_lqr= lqr(a1,b1,Q,R);
-K_i=100;
+K_i=10;
 
  
 max_torque=220; %Max. Drehmoment Motor
