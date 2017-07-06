@@ -1,12 +1,5 @@
 clc
 
-%% EW constants for ultra basic HIL plant
-
-v0                 = 0; % Initial vehicle speed
-wheel_radius = 0.3; % Wheel radius
-k                   = 1e-2; % Motor losses (W/(N*M)^2)
-t_torque        = 0.02; % Electric motor time constant
-
 %% Transfer Function Torque to lambda
 m=700;
 g=9.81;
@@ -30,20 +23,25 @@ A=2.5;
 rho=1.2;
     W_luft=0.5*cw*A*rho; % Airdrag
     
+f_r=0.05; % wheel resistance coeff. 0.05
+F_rtot=f_r*m*g; %wheel resistance of all wheels
+    
 
 %% Transfer function voltage to torque
 
 a=31.111;
 b=-12.44444; %f(x)=ax+b
-saturation_voltage_high=4.9;
-saturation_voltage_low=0.4;
+saturation_torque_high=220;
+% saturation_voltage_low=0;
 
 %% Matrix A, B
 
-Ta0=800;
+Ta0=1000;
 lambda_0=0.1;
 w0=200;
 Fz0=450*g;
+mu=0.8;
+v_pnk=3;
 
 a1= Ta0/(J*w0)-Fz0*r/(J*w0)*(theta1*theta2*exp(-lambda_0*theta2)-theta3)+Fz0*r/(J*w0)*(theta1*(1-exp(-lambda_0*theta2)-lambda_0*theta2*exp(-lambda_0*theta2))-2*lambda_0*theta3)-Fz0/(m*r*w0)*(theta1*theta2*exp(-lambda_0*theta2)-theta3);
 
@@ -53,34 +51,23 @@ b1=1/(J*w0)-lambda_0/(J*w0);
 
 %% Controller LQR
 
-A= a1;
+Q=1;
 
-B= b1;
-
-
-Q=1000;
-
-R=0.01;
+R=0.1;
 
 lambda_target=0.1;
 
 
-K_lqr= lqr(A,B,Q,R);
-K_i=1000;
-
-
+K_lqr= lqr(a1,b1,Q,R);
+K_i=10;
 
  
-max_torque=140; %Max. Drehmoment Motor
-saturation_torque_high=max_torque*gear_ratio;
+max_torque=220; %Max. Drehmoment Motor
 
 
 
 
 %% 
-
-% sim('Acceleration',5)
-% Simulink.sdi.view
-
-
+sim('Acceleration',5)
+Simulink.sdi.view
 
