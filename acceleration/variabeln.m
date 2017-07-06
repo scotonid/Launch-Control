@@ -55,21 +55,21 @@ b1=1/(J*w0)-lambda_0/(J*w0);
 
 %% Controller LQR
 
-Q=0.1;
+Q=10;
 
-R=0.1;
+R=1;
 
 lambda_target=0.1;
 
 
 K_lqr= lqr(a1,b1,Q,R);
-K_i=0.1;
+K_i=1;
 
 
 max_torque=120; %Max. Drehmoment Motor
 saturation_torque_high=max_torque*gear_ratio;
 
 %% 
-sim('Acceleration',5)
-Simulink.sdi.view
+% sim('Acceleration',5)
+% Simulink.sdi.view
 
